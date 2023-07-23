@@ -11,10 +11,11 @@ import (
 	"github.com/jjjosephhh/solitaire-thirteens-01/utils"
 )
 
+var screenWidth = 1000
+var screenHeight = 1000
+
 func main() {
-	screenWidth := int32(rl.GetScreenWidth())
-	screenHeight := int32(rl.GetScreenWidth())
-	rl.InitWindow(screenWidth, screenHeight, "Solitaire Thirteens 01")
+	rl.InitWindow(int32(screenWidth), int32(screenHeight), "Solitaire Thirteens 01")
 	defer rl.CloseWindow()
 
 	rl.InitAudioDevice()
@@ -30,7 +31,10 @@ func main() {
 	dimensionsCard := utils.NewDimensions(t.Spades01.Width, t.Spades01.Height)
 
 	posUnplayed := rl.NewVector2(float32(constants.SPACING_H), float32(constants.SPACING_V))
-	posMatched := rl.NewVector2(float32(dimensionsCard.Width*6)+float32(constants.SPACING_H*7), float32(constants.SPACING_V))
+	posMatched := rl.NewVector2(
+		float32(screenWidth)-float32(dimensionsCard.Width)-float32(constants.SPACING_H),
+		float32(screenHeight)-float32(dimensionsCard.Height)-float32(constants.SPACING_V),
+	)
 	unplayed := pile.NewDeck(&posUnplayed, dimensionsCard)
 	inPlay := &pile.Pile{Cards: unplayed.InitializeInPlay()}
 	matched := &pile.Pile{
@@ -46,7 +50,7 @@ func main() {
 	canPlay := true
 
 	imageBackground01 := rl.LoadImage(path.Join(pathBackground, "foreground.png"))
-	scalingFactor01 := float32(imageBackground01.Width) / float32(rl.GetScreenWidth())
+	scalingFactor01 := float32(imageBackground01.Width) / float32(screenWidth)
 	rl.ImageResize(
 		imageBackground01,
 		int32(float32(imageBackground01.Width)/scalingFactor01),
@@ -57,7 +61,7 @@ func main() {
 	rl.UnloadImage(imageBackground01)
 
 	imageBackground02 := rl.LoadImage(path.Join(pathBackground, "back-buildings.png"))
-	scalingFactor02 := float32(imageBackground02.Width) / float32(rl.GetScreenWidth())
+	scalingFactor02 := float32(imageBackground02.Width) / float32(screenWidth)
 	rl.ImageResize(
 		imageBackground02,
 		int32(float32(imageBackground02.Width)/scalingFactor02),
@@ -68,7 +72,7 @@ func main() {
 	rl.UnloadImage(imageBackground02)
 
 	imageBackground03 := rl.LoadImage(path.Join(pathBackground, "far-buildings.png"))
-	scalingFactor03 := float32(imageBackground03.Width) / float32(rl.GetScreenWidth())
+	scalingFactor03 := float32(imageBackground03.Width) / float32(screenWidth)
 	rl.ImageResize(
 		imageBackground03,
 		int32(float32(imageBackground03.Width)/scalingFactor03),
@@ -94,6 +98,7 @@ func main() {
 					canPlay = true
 					unplayed = pile.NewDeck(&posUnplayed, dimensionsCard)
 					inPlay.Cards = unplayed.InitializeInPlay()
+					matched.Cards = make([]*card.Card, 0)
 					continue
 				}
 
@@ -233,13 +238,13 @@ func main() {
 			canPlay = inPlay.MatchExists()
 		}
 		if !canPlay {
-			rl.DrawRectangle(0, 0, screenWidth, screenHeight, constants.COLOR_RESTART)
-			textWidth := rl.MeasureText(constants.TEXT_RESTART, constants.TEXT_SIZE_RESTART)
+			rl.DrawRectangle(0, 0, int32(screenWidth), int32(screenHeight), constants.COLOR_RESTART)
+			textWidth := rl.MeasureText(constants.TEXT_RESTART, constants.TEXT_SIZE_WIN)
 			rl.DrawText(
 				constants.TEXT_RESTART,
 				(int32(rl.GetScreenWidth())-textWidth)/2,
-				(int32(rl.GetScreenHeight())-constants.TEXT_SIZE_RESTART)/2,
-				constants.TEXT_SIZE_RESTART,
+				(int32(rl.GetScreenHeight())-constants.TEXT_SIZE_WIN)/2,
+				constants.TEXT_SIZE_WIN,
 				rl.White,
 			)
 		}

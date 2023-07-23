@@ -45,16 +45,26 @@ func (p *Pile) IsEmpty() bool {
 }
 
 func (p *Pile) InitializeInPlay() []*card.Card {
+	var basePosition *rl.Vector2
 	var drawn []*card.Card
 	for i := 0; i < 10; i++ {
 		c, ok := p.Draw()
 		if !ok {
 			continue
 		}
+
+		if basePosition == nil {
+			position := rl.NewVector2(
+				float32(rl.GetScreenWidth())/2-2.5*float32(c.Width),
+				float32(rl.GetScreenHeight())/2-1*float32(c.Height),
+			)
+			basePosition = &position
+		}
+
 		c.Show = true
 		newPosition := rl.NewVector2(
-			float32(1+i%5)*float32(c.Width)+float32(2+i%5)*float32(constants.SPACING_H),
-			float32(i/5)*float32(c.Height+constants.SPACING_V)+constants.TOP_OFFSET,
+			basePosition.X+float32(i%5)*float32(c.Width)+float32(i%5)*float32(constants.SPACING_H),
+			basePosition.Y+float32(i/5)*float32(c.Height+constants.SPACING_V)+constants.TOP_OFFSET,
 		)
 		c.TargetPosition = &newPosition
 		drawn = append(drawn, c)

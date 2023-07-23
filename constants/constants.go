@@ -17,7 +17,6 @@ const TEXT_WIN = "You win! Click to play again."
 const TEXT_SIZE_WIN = 26
 
 const TEXT_RESTART = "Impossible to make 13! Click to play again."
-const TEXT_SIZE_RESTART = 22
 
 var COLOR_RESTART = rl.NewColor(0, 0, 0, 180)
 var POSITION_DECK rl.Vector2 = rl.NewVector2(0, TOP_OFFSET)
