@@ -86,3 +86,20 @@ func (c *Card) Move() bool {
 	}
 	return true
 }
+
+func (c *Card) DrawOutline(d *dimensions.Dimensions) {
+	rl.DrawRectanglePro(
+		rl.NewRectangle(
+			c.Position.X+float32(d.Width)/2-2,
+			c.Position.Y+float32(d.Height)/2-2,
+			float32(d.Width)+4,
+			float32(d.Height)+4,
+		),
+		rl.NewVector2(
+			float32(d.Width)/2,
+			float32(d.Height)/2,
+		),
+		c.RotationAngle,
+		rl.Red,
+	)
+}

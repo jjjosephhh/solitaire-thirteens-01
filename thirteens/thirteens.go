@@ -151,20 +151,7 @@ func Run() {
 				c.TargetFlipAngle = 180
 			}
 			if c == game.Selected1 || c == game.Selected2 {
-				rl.DrawRectanglePro(
-					rl.NewRectangle(
-						c.Position.X+float32(dimensionsCard.Width)/2-2,
-						c.Position.Y+float32(dimensionsCard.Height)/2-2,
-						float32(dimensionsCard.Width)+4,
-						float32(dimensionsCard.Height)+4,
-					),
-					rl.NewVector2(
-						float32(dimensionsCard.Width)/2,
-						float32(dimensionsCard.Height)/2,
-					),
-					c.RotationAngle,
-					rl.Red,
-				)
+				c.DrawOutline(dimensionsCard)
 			}
 			t.DrawCard(c)
 		}
