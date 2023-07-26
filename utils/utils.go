@@ -1,8 +1,6 @@
 package utils
 
-import (
-	"github.com/jjjosephhh/solitaire-thirteens-01/card"
-)
+import "github.com/jjjosephhh/solitaire-thirteens-01/card"
 
 func IsMatch(c1, c2 *card.Card) []*card.Card {
 	var matches []*card.Card
@@ -16,13 +14,4 @@ func IsMatch(c1, c2 *card.Card) []*card.Card {
 		matches = append(matches, c1, c2)
 	}
 	return matches
-}
-
-type Dimensions struct {
-	Width  int32
-	Height int32
-}
-
-func NewDimensions(width, height int32) *Dimensions {
-	return &Dimensions{Width: width, Height: height}
 }

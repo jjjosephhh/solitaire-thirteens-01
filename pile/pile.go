@@ -7,7 +7,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/jjjosephhh/solitaire-thirteens-01/card"
 	"github.com/jjjosephhh/solitaire-thirteens-01/constants"
-	"github.com/jjjosephhh/solitaire-thirteens-01/utils"
+	"github.com/jjjosephhh/solitaire-thirteens-01/dimensions"
 )
 
 type Pile struct {
@@ -15,7 +15,7 @@ type Pile struct {
 	Position *rl.Vector2
 }
 
-func NewDeck(position *rl.Vector2, dimensionsCard *utils.Dimensions) *Pile {
+func NewDeck(position *rl.Vector2, dimensionsCard *dimensions.Dimensions) *Pile {
 	p := &Pile{
 		Cards:    make([]*card.Card, 0),
 		Position: position,
@@ -30,7 +30,8 @@ func NewDeck(position *rl.Vector2, dimensionsCard *utils.Dimensions) *Pile {
 		)
 	}
 	for _, card := range p.Cards {
-		card.Position = p.Position
+		card.Position.X = p.Position.X
+		card.Position.Y = p.Position.Y
 	}
 	p.Shuffle()
 	return p
@@ -66,7 +67,8 @@ func (p *Pile) InitializeInPlay() []*card.Card {
 			basePosition.X+float32(i%5)*float32(c.Width)+float32(i%5)*float32(constants.SPACING_H),
 			basePosition.Y+float32(i/5)*float32(c.Height+constants.SPACING_V)+constants.TOP_OFFSET,
 		)
-		c.TargetPosition = &newPosition
+		c.TargetPosition.X = newPosition.X
+		c.TargetPosition.Y = newPosition.Y
 		drawn = append(drawn, c)
 	}
 	return drawn
@@ -95,17 +97,14 @@ func (p *Pile) MoveTo(targetPile *Pile, cards []*card.Card) []*card.Card {
 	if len(cards) == 0 {
 		return moved
 	}
+	cardMap := make(map[*card.Card]bool)
+	for _, c := range cards {
+		cardMap[c] = true
+	}
 
 	var i int
 	for _, cardInPlay := range p.Cards {
-		skip := false
-		for _, cardToMove := range cards {
-			if cardInPlay == cardToMove {
-				skip = true
-				break
-			}
-		}
-		if skip {
+		if _, ok := cardMap[cardInPlay]; ok {
 			continue
 		}
 		p.Cards[i] = cardInPlay
@@ -115,7 +114,8 @@ func (p *Pile) MoveTo(targetPile *Pile, cards []*card.Card) []*card.Card {
 	targetPile.Cards = append(targetPile.Cards, cards...)
 
 	for _, c := range cards {
-		c.TargetPosition = targetPile.Position
+		c.TargetPosition.X = targetPile.Position.X
+		c.TargetPosition.Y = targetPile.Position.Y
 		moved = append(moved, c)
 	}
 	return moved
